@@ -17,7 +17,11 @@ namespace FileHash
         {
             if (stream.CanSeek && stream.Position > 0)
                 stream.Seek(0, SeekOrigin.Begin);
-            return ConvertHashString(algorithm.Create().ComputeHash(stream));
+
+            using (var hashAlgorithm = algorithm.Create())
+            {
+                return ConvertHashString(hashAlgorithm.ComputeHash(stream));
+            }
         }
 
         private static string ConvertHashString(byte[] bytes)
